@@ -84,10 +84,10 @@
             }
 
             // Construct the purchase URL
-            const purchaseUrl = `http://127.0.0.1:5000/purchase${refCode ? refCode : ''}income${amount}`;
+            const purchaseUrl = `https://flask-test-53ar.onrender.com/purchase${refCode ? refCode : ''}income${amount}`;
 
             try {
-                // Make a POST request to the server
+                // Make a GET request to the server
                 const response = await fetch(purchaseUrl, { method: 'GET' });
                 if (response.ok) {
                     showNotification('Purchase successful!', 'success');
