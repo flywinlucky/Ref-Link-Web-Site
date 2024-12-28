@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchase</title>
+    <title>Index</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,10 +14,12 @@
             flex-direction: column;
             align-items: center;
         }
+
         .container {
             max-width: 400px;
             text-align: center;
         }
+
         button {
             padding: 10px 20px;
             background-color: #007bff;
@@ -25,90 +28,42 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
-        input[type="number"] {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .notification {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 5px;
-            display: none; /* Initially hidden */
-        }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
     </style>
 </head>
+
 <body>
     <div class="container">
+        <h1>Welcome!</h1>
         <h1>Ref Code: <span id="ref-code">No Ref</span></h1>
-        <input type="number" id="amount" placeholder="Enter amount in $" min="1" required>
-        <button onclick="buy()">Buy</button>
-        <div id="notification" class="notification"></div>
+        <h1>Server URL: <span id="server-url"></span></h1> <!-- Added server URL span -->
+        <button onclick="goToBuyPage()">To Home Page</button>
     </div>
 
     <script>
-        // Get the current URL
+        // Salvarea codului de referință în localStorage
         const currentUrl = window.location.href;
+        const refCode = new URLSearchParams(window.location.search).get('code');
 
-        // Function to get the referral code from the URL
-        function getReferralCode(url) {
-            const urlParams = new URLSearchParams(new URL(url).search);
-            return urlParams.get('code'); // Extracts the 'code' parameter
+        if (refCode) {
+            localStorage.setItem('referralCode', refCode); // Salvează codul de referință
         }
 
-        // Get the referral code
-        const refCode = getReferralCode(currentUrl);
-
-        // Set the referral code in the span
+        // Afișează codul de referință
         document.getElementById('ref-code').textContent = refCode ? refCode : 'No Ref';
 
-        // Function to handle the buy button click
-        async function buy() {
-            const amount = document.getElementById('amount').value;
-            if (!amount) {
-                showNotification('Please enter a valid amount.', 'error');
-                return;
-            }
-
-            // Construct the purchase URL
-            const purchaseUrl = `https://flask-test-53ar.onrender.com/purchase${refCode ? refCode : ''}income${amount}`;
-
-            try {
-                // Make a GET request to the server
-                const response = await fetch(purchaseUrl, { method: 'GET' });
-                if (response.ok) {
-                    showNotification('Purchase successful!', 'success');
-                } else {
-                    throw new Error('Purchase failed.');
-                }
-            } catch (error) {
-                showNotification(error.message, 'error');
-            }
-        }
-
-        // Function to show notifications
-        function showNotification(message, type) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`; // Add success or error class
-            notification.style.display = 'block'; // Show notification
-            setTimeout(() => {
-                notification.style.display = 'none'; // Hide notification after 3 seconds
-            }, 3000);
+        // Obține URL-ul serverului și afișează-l
+        const serverUrl = window.location.origin; // Obține URL-ul serverului (ex: http://127.0.0.1:5000)
+        document.getElementById('server-url').textContent = serverUrl; // Afișează server URL
+       
+        // Redirect to the buy page
+        function goToBuyPage() {
+            window.location.href = "home.html";
         }
     </script>
 </body>
+
 </html>
